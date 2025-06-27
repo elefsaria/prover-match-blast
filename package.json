@@ -1,7 +1,7 @@
 {
-  "name": "prover-match-blast",
+  "name": "prover-match-blast-avatars",
   "version": "1.0.0",
-  "description": "Prover Match Blast - Game buah dengan avatar",
+  "description": "Prover Match Blast - Game avatar matching",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
