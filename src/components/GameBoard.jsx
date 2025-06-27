@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import FruitTile from "./FruitTile";
 
+// Daftar avatar
 const avatarTypes = ["avatar1", "avatar2", "avatar3", "avatar4", "avatar5"];
 const ROWS = 6;
 const COLS = 6;
+
+// Suara ledakan
+const blastAudio = new Audio("/sounds/blast.mp3");
+blastAudio.volume = 0.3;
 
 function getRandomAvatar() {
   return avatarTypes[Math.floor(Math.random() * avatarTypes.length)];
@@ -29,7 +34,8 @@ export default function GameBoard() {
       setSelectedTile({ row, col });
     } else {
       const { row: r1, col: c1 } = selectedTile;
-      const r2 = row, c2 = col;
+      const r2 = row;
+      const c2 = col;
 
       // Hanya boleh swap tetangga
       const isAdjacent = Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1;
@@ -46,7 +52,6 @@ export default function GameBoard() {
         setGrid(newGrid);
         setSelectedTile(null);
       } else {
-        // Tidak valid, kembalikan
         setIsAnimating(true);
         setTimeout(() => {
           setIsAnimating(false);
@@ -56,7 +61,7 @@ export default function GameBoard() {
     }
   };
 
-  // Game loop: ledak dan isi ulang
+  // Loop pencocokan otomatis
   useEffect(() => {
     const loop = setInterval(() => {
       const matched = findMatches(grid);
@@ -64,7 +69,12 @@ export default function GameBoard() {
         setIsAnimating(true);
         setBlastMap(matched);
         setScore((prev) => prev + matched.length * 10);
+
         setTimeout(() => {
+          // 🔊 Putar suara ledakan
+          blastAudio.currentTime = 0;
+          blastAudio.play().catch((e) => console.log("Audio blocked:", e));
+
           const newGrid = applyMatches(grid, matched);
           setGrid(newGrid);
           setBlastMap([]);
@@ -128,9 +138,23 @@ export default function GameBoard() {
   const isBlasting = (row, col) =>
     blastMap.some(([r, c]) => r === row && c === col);
 
+  const isSelected = (row, col) =>
+    selectedTile &&
+    selectedTile.row === row &&
+    selectedTile.col === col;
+
   return (
     <div>
       <h2>🧠 Skor: {score}</h2>
+
+      {/* Label Kolom A–F */}
+      <div className="column-labels">
+        {["A", "B", "C", "D", "E", "F"].map((label) => (
+          <div className="column-label" key={label}>{label}</div>
+        ))}
+      </div>
+
+      {/* Game Grid */}
       <div className="game-board">
         {grid.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>
@@ -139,11 +163,7 @@ export default function GameBoard() {
                 key={`${rowIndex}-${colIndex}`}
                 fruit={avatar}
                 isBlasting={isBlasting(rowIndex, colIndex)}
-                isSelected={
-                  selectedTile &&
-                  selectedTile.row === rowIndex &&
-                  selectedTile.col === colIndex
-                }
+                isSelected={isSelected(rowIndex, colIndex)}
                 onClick={() => handleTileClick(rowIndex, colIndex)}
               />
             ))}
