@@ -17,21 +17,26 @@ function generateInitialGrid() {
 
 export default function GameBoard() {
   const [grid, setGrid] = useState(generateInitialGrid());
+  const [score, setScore] = useState(0);
+  const [blastMap, setBlastMap] = useState([]);
 
-  // Cek apakah ada match-3 di grid
   useEffect(() => {
     const interval = setInterval(() => {
       const matched = findMatches(grid);
       if (matched.length > 0) {
-        const newGrid = applyMatches(grid, matched);
-        setGrid(newGrid);
+        setBlastMap(matched); // trigger animasi
+        setScore((prev) => prev + matched.length * 10);
+        setTimeout(() => {
+          const newGrid = applyMatches(grid, matched);
+          setGrid(newGrid);
+          setBlastMap([]);
+        }, 300); // animasi 300ms
       }
-    }, 500);
+    }, 600);
 
     return () => clearInterval(interval);
   }, [grid]);
 
-  // Cari posisi yang cocok secara horizontal dan vertikal
   const findMatches = (grid) => {
     const matches = [];
 
@@ -58,7 +63,6 @@ export default function GameBoard() {
     return matches;
   };
 
-  // Ledakkan yang cocok dan geser ke bawah
   const applyMatches = (grid, matches) => {
     const newGrid = grid.map((row) => [...row]);
 
@@ -78,7 +82,6 @@ export default function GameBoard() {
         }
       }
 
-      // Isi atas dengan avatar baru
       for (let row = 0; row < emptySpots; row++) {
         newGrid[row][col] = getRandomAvatar();
       }
@@ -87,19 +90,26 @@ export default function GameBoard() {
     return newGrid;
   };
 
+  const isBlasting = (row, col) => {
+    return blastMap.some(([r, c]) => r === row && c === col);
+  };
+
   return (
-    <div className="game-board">
-      {grid.map((row, rowIndex) => (
-        <div className="row" key={rowIndex}>
-          {row.map((avatar, colIndex) => (
-            <FruitTile
-              key={`${rowIndex}-${colIndex}`}
-              fruit={avatar}
-              onClick={() => {}}
-            />
-          ))}
-        </div>
-      ))}
+    <div>
+      <h2>🧠 Skor: {score}</h2>
+      <div className="game-board">
+        {grid.map((row, rowIndex) => (
+          <div className="row" key={rowIndex}>
+            {row.map((avatar, colIndex) => (
+              <FruitTile
+                key={`${rowIndex}-${colIndex}`}
+                fruit={avatar}
+                isBlasting={isBlasting(rowIndex, colIndex)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
