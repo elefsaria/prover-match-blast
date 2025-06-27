@@ -20,8 +20,9 @@ export default function GameBoard() {
   const [score, setScore] = useState(0);
   const [blastMap, setBlastMap] = useState([]);
 
+  // Game loop — jalan sekali saat mount
   useEffect(() => {
-    const interval = setInterval(() => {
+    const loop = setInterval(() => {
       const matched = findMatches(grid);
       if (matched.length > 0) {
         setBlastMap(matched); // trigger animasi
@@ -30,42 +31,46 @@ export default function GameBoard() {
           const newGrid = applyMatches(grid, matched);
           setGrid(newGrid);
           setBlastMap([]);
-        }, 300); // animasi 300ms
+        }, 300); // beri waktu animasi dulu
       }
-    }, 600);
+    }, 600); // jalankan tiap 600ms
 
-    return () => clearInterval(interval);
+    return () => clearInterval(loop);
   }, [grid]);
 
   const findMatches = (grid) => {
     const matches = [];
-
     // Horizontal
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS - 2; col++) {
         const val = grid[row][col];
-        if (val && val === grid[row][col + 1] && val === grid[row][col + 2]) {
+        if (
+          val &&
+          val === grid[row][col + 1] &&
+          val === grid[row][col + 2]
+        ) {
           matches.push([row, col], [row, col + 1], [row, col + 2]);
         }
       }
     }
-
     // Vertical
     for (let col = 0; col < COLS; col++) {
       for (let row = 0; row < ROWS - 2; row++) {
         const val = grid[row][col];
-        if (val && val === grid[row + 1][col] && val === grid[row + 2][col]) {
+        if (
+          val &&
+          val === grid[row + 1][col] &&
+          val === grid[row + 2][col]
+        ) {
           matches.push([row, col], [row + 1, col], [row + 2, col]);
         }
       }
     }
-
     return matches;
   };
 
   const applyMatches = (grid, matches) => {
     const newGrid = grid.map((row) => [...row]);
-
     for (const [row, col] of matches) {
       newGrid[row][col] = null;
     }
@@ -81,7 +86,6 @@ export default function GameBoard() {
           newGrid[row][col] = null;
         }
       }
-
       for (let row = 0; row < emptySpots; row++) {
         newGrid[row][col] = getRandomAvatar();
       }
