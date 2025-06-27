@@ -19,6 +19,22 @@ h2 {
   font-weight: bold;
 }
 
+/* Label kolom A–F */
+.column-labels {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.column-label {
+  width: 64px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #666;
+}
+
 /* Game board layout */
 .game-board {
   display: grid;
@@ -50,13 +66,13 @@ h2 {
   transform: scale(1.1);
 }
 
-/* Selected tile */
+/* Tile yang sedang dipilih */
 .fruit-tile.selected {
   outline: 3px solid #f77;
   border-radius: 8px;
 }
 
-/* Blast animation */
+/* Ledakan animasi */
 .fruit-tile.blast img {
   animation: blast 0.3s ease-in-out;
 }
@@ -76,8 +92,13 @@ h2 {
   }
 }
 
-/* Responsive mobile adjustments */
+/* Responsif mobile */
 @media screen and (max-width: 600px) {
+  .column-label {
+    width: 48px;
+    font-size: 12px;
+  }
+
   .fruit-tile img {
     width: 48px;
     height: 48px;
