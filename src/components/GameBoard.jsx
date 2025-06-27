@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import FruitTile from "./FruitTile";
 
-const fruitTypes = ["apple", "grape", "avocado", "lemon", "strawberry"];
+const avatarTypes = ["avatar1", "avatar2", "avatar3", "avatar4", "avatar5"];
 
-function getRandomFruit() {
-  return fruitTypes[Math.floor(Math.random() * fruitTypes.length)];
+function getRandomAvatar() {
+  return avatarTypes[Math.floor(Math.random() * avatarTypes.length)];
 }
 
 export default function GameBoard() {
@@ -14,25 +14,25 @@ export default function GameBoard() {
     const rows = 6;
     const cols = 6;
     const newGrid = Array.from({ length: rows }, () =>
-      Array.from({ length: cols }, getRandomFruit)
+      Array.from({ length: cols }, getRandomAvatar)
     );
     setGrid(newGrid);
   }, []);
 
-  const handleFruitClick = (rowIndex, colIndex) => {
+  const handleAvatarClick = (rowIndex, colIndex) => {
     console.log("Clicked:", rowIndex, colIndex);
-    // TODO: Tambahkan logika untuk match/blast buah di sini
+    // TODO: Tambahkan logika match/blast avatar di sini
   };
 
   return (
     <div className="game-board">
       {grid.map((row, rowIndex) => (
         <div className="row" key={rowIndex}>
-          {row.map((fruit, colIndex) => (
+          {row.map((avatar, colIndex) => (
             <FruitTile
               key={`${rowIndex}-${colIndex}`}
-              fruit={fruit}
-              onClick={() => handleFruitClick(rowIndex, colIndex)}
+              fruit={avatar}
+              onClick={() => handleAvatarClick(rowIndex, colIndex)}
             />
           ))}
         </div>
