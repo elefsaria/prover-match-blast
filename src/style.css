@@ -10,35 +10,6 @@ body {
   margin-top: 20px;
 }
 
-.avatar-selector {
-  padding: 20px;
-}
-
-.avatar-list {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.avatar.selected {
-  border: 3px solid #ff66cc;
-  transform: scale(1.1);
-}
-
-.avatar-in-game {
-  width: 64px;
-  margin-bottom: 10px;
-}
-
 .game-board {
   display: grid;
   grid-template-rows: repeat(6, 64px);
