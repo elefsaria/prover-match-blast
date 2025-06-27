@@ -33,19 +33,30 @@ h2 {
   gap: 6px;
 }
 
-/* Avatar tile */
+/* Tile style */
+.fruit-tile {
+  touch-action: manipulation;
+}
+
 .fruit-tile img {
   width: 64px;
   height: 64px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  user-select: none;
 }
 
 .fruit-tile img:hover {
   transform: scale(1.1);
 }
 
-/* Animasi ledakan */
+/* Selected tile */
+.fruit-tile.selected {
+  outline: 3px solid #f77;
+  border-radius: 8px;
+}
+
+/* Blast animation */
 .fruit-tile.blast img {
   animation: blast 0.3s ease-in-out;
 }
@@ -65,7 +76,7 @@ h2 {
   }
 }
 
-/* Responsif untuk mobile */
+/* Responsive mobile adjustments */
 @media screen and (max-width: 600px) {
   .fruit-tile img {
     width: 48px;
